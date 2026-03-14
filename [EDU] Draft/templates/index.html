@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard C&A - Visão Estoque</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<input type='checkbox' id='q1' class='toggle-input'>
+
+<div class='excel-table'>
+    <div class='row header-row'>
+        <div class='cell label level-0'>Produto / Categoria</div>
+        <div class='col-group'>
+            <div class='cell'>Jan</div>
+            <div class='cell'>Fev</div>
+            <div class='cell'>Mar</div>
+        </div>
+        <div class='cell total'>
+            <label for='q1' class='btn-col'></label> Total Q1
+        </div>
+    </div>
+
+    {% set categorias = ["Hardware", "Acessórios"] %}
+    
+    {% for cat in categorias %}
+    <input type='checkbox' id='{{ cat }}' class='toggle-input'>
+    <div class='row'>
+        <div class='cell label level-0'>
+            <label for='{{ cat }}' class='btn-row'></label> {{ cat }}
+        </div>
+        <div class='col-group'>
+            <div class='cell'>{{ dados[cat].Jan }}</div>
+            <div class='cell'>{{ dados[cat].Fev }}</div>
+            <div class='cell'>{{ dados[cat].Mar }}</div>
+        </div>
+        <div class='cell total'>{{ dados[cat].Total }}</div>
+    </div>
+
+    <div class='group-children'>
+        <div class='row'>
+            <div class='cell label level-1'>Dell XPS 13</div>
+            <div class='col-group'>
+                <div class='cell'>{{ dados['Dell XPS 13'].Jan }}</div>
+                <div class='cell'>{{ dados['Dell XPS 13'].Fev }}</div>
+                <div class='cell'>{{ dados['Dell XPS 13'].Mar }}</div>
+            </div>
+            <div class='cell total'>{{ dados['Dell XPS 13'].Total }}</div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+</body>
+</html>
