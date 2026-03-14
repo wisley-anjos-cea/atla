@@ -1,0 +1,138 @@
+:root {
+    --excel-green: #217346;
+    --border: #bbb;
+    --cell-w: 80px;
+    --label-w: 220px;
+}
+
+/* Reset e Box-sizing */
+* { 
+    box-sizing: border-box; 
+    font-family: 'Segoe UI', sans-serif; 
+}
+
+/* Esconder Checkbox */
+.toggle-input { 
+    display: none; 
+}
+
+/* Estrutura da Tabela */
+.excel-table {
+    display: inline-flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    margin-top: 50px;
+    margin-left: 10px;
+}
+
+.row { 
+    display: flex; 
+    height: 30px; 
+}
+
+.cell {
+    width: var(--cell-w);
+    height: 100%;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    flex-shrink: 0;
+    font-size: 12px;
+}
+
+.cell.label { 
+    width: var(--label-w); 
+    justify-content: flex-start; 
+    position: relative;
+    background: #f3f3f3;
+    white-space: nowrap;
+}
+
+.cell.total { 
+    background: #eef7f2; 
+    font-weight: bold; 
+    position: relative; 
+}
+
+/* Botão +/- */
+.btn-row {
+    width: 15px;
+    height: 15px;
+    border: 1px solid #888;
+    background: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-right: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.btn-row::before { 
+    content: '+'; 
+}
+
+/* --- LÓGICA DE HIERARQUIA --- */
+
+.group-children { 
+    display: none; 
+    flex-direction: column; 
+}
+
+/* Mostra filhos */
+.toggle-input:checked + .row + .group-children { 
+    display: flex; 
+}
+
+/* Muda sinal */
+.toggle-input:checked + .row .btn-row::before { 
+    content: '-'; 
+}
+
+/* Recuos */
+.level-0 { padding-left: 10px; }
+.level-1 { padding-left: 30px; }
+.level-2 { padding-left: 50px; }
+
+/* Botão coluna */
+.btn-col {
+    position: absolute;
+    top: -40px; 
+    left: 25px;
+    width: 18px; 
+    height: 18px;
+    background: white; 
+    border: 1px solid #888;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    cursor: pointer; 
+    font-weight: bold; 
+    z-index: 20;
+}
+
+.btn-col::before { 
+    content: '-'; 
+}
+
+#q1:checked ~ .excel-table .col-group { 
+    max-width: 0; 
+    opacity: 0; 
+}
+
+#q1:checked ~ .excel-table .btn-col::before { 
+    content: '+'; 
+}
+
+.col-group { 
+    display: flex; 
+    overflow: hidden; 
+    transition: all 0.3s; 
+    max-width: 300px; 
+}

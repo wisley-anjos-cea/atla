@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Tabela estilo Excel</title>
+
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+
+<input type='checkbox' id='q1' class='toggle-input'>
+
+<div class='excel-table'>
+    
+    <div class='row'>
+        <div class='cell label level-0'>Produto / Categoria</div>
+        <div class='col-group'>
+            <div class='cell'>Jan</div>
+            <div class='cell'>Fev</div>
+            <div class='cell'>Mar</div>
+        </div>
+        <div class='cell total'>
+            <label for='q1' class='btn-col'></label>
+            Total Q1
+        </div>
+    </div>
+
+    <input type='checkbox' id='hw' class='toggle-input'>
+    <div class='row'>
+        <div class='cell label level-0'>
+            <label for='hw' class='btn-row'></label> Hardware
+        </div>
+        <div class='col-group'>
+            <div class='cell'>100</div>
+            <div class='cell'>100</div>
+            <div class='cell'>100</div>
+        </div>
+        <div class='cell total'>300</div>
+    </div>
+
+    <div class='group-children'>
+        <input type='checkbox' id='nb' class='toggle-input'>
+        <div class='row'>
+            <div class='cell label level-1'>
+                <label for='nb' class='btn-row'></label> Notebooks
+            </div>
+            <div class='col-group'>
+                <div class='cell'>50</div>
+                <div class='cell'>50</div>
+                <div class='cell'>50</div>
+            </div>
+            <div class='cell total'>150</div>
+        </div>
+
+        <div class='group-children'>
+            <div class='row'>
+                <div class='cell label level-2'>Dell XPS 13</div>
+                <div class='col-group'>
+                    <div class='cell'>25</div>
+                    <div class='cell'>25</div>
+                    <div class='cell'>25</div>
+                </div>
+                <div class='cell total'>75</div>
+            </div>
+        </div>
+    </div>
+
+    <input type='checkbox' id='acc' class='toggle-input'>
+    <div class='row'>
+        <div class='cell label level-0'>
+            <label for='acc' class='btn-row'></label> Acessórios
+        </div>
+        <div class='col-group'>
+            <div class='cell'>10</div>
+            <div class='cell'>10</div>
+            <div class='cell'>10</div>
+        </div>
+        <div class='cell total'>30</div>
+    </div>
+
+    <div class='group-children'>
+        <div class='row'>
+            <div class='cell label level-1'>Mouses</div>
+            <div class='col-group'>
+                <div class='cell'>10</div>
+                <div class='cell'>10</div>
+                <div class='cell'>10</div>
+            </div>
+            <div class='cell total'>30</div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
