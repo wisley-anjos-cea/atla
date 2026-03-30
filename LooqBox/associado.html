@@ -1,0 +1,132 @@
+<style>
+    .item-container {
+        display: grid;
+        grid-template-columns: repeat(3, auto); 
+        justify-content: center;               
+        column-gap: 22px;                      
+        row-gap: 20px;
+        padding: 10px;
+        width: 100%;
+    }
+    
+    @media (max-width: 900px) {
+        .item-container {
+            grid-template-columns: repeat(3, minmax(80px, 1fr));
+            column-gap: 20px;
+        }
+    }
+    
+    @media (max-width: 600px) {
+        .item-container {
+            grid-template-columns: repeat(3, minmax(80px, 1fr));
+            column-gap: 16px;
+            row-gap: 18px;
+        }
+    }
+
+    
+    .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* garante centralização horizontal */
+        text-align: center;
+    }
+    
+    .circular-background {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80px;
+        height: 80px;
+        border-radius: 50% 30% 50% 30%;
+        background: #4600fa;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15); 
+        margin: 0px;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .circular-background:hover {
+        border-color: #4600fa;
+        box-shadow: 0 0 6px #4600fa;
+    }
+
+    .mini-circular {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .circular-background img {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .icon-text {
+        color: rgb(119, 119, 119);
+        text-align: center;
+        display: block;
+        margin-top: 4px;
+        line-height: 1.2;
+        white-space: normal;
+        width: 85px;
+    }
+    
+    .home-button-with-zoom a {
+        text-decoration: none;
+    }
+
+</style>
+
+<div class="item-container">
+    <!-- 1 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="pontos associados">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/ios/50/ffffff/prize--v1.png" alt="Pontos Associados"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">Pontos<br>Associados</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="ranking associados">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/ios/50/ffffff/leaderboard.png" alt="Ranking Associados"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">Ranking<br>Associados</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="menu processos">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/ios/129/ffffff/creating.png" alt="Menu processos"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">Processos<br>Core</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,29 @@
+INÍCIO DO PROCESSO DE PREVISÃO DE VENDAS
+Objetivo: gerar previsão diária de vendas para o ano de 2026 por categoria.
+
+REGRAS DE CÁLCULO UTILIZADAS NO MODELO:
+- Venda diária calculada como a soma do SALEAMT por data e categoria.
+- Granularidade diária obrigatória: dias sem venda são tratados como valor zero.
+- Categorias com menos de 10 dias de histórico são desconsideradas.
+- Outliers tratados via corte no percentil 98.
+- Período pós-salário definido como dias 1 a 10.
+- Sazonalidade semanal e anual em modo multiplicativo.
+- Tendência linear com penalização de mudanças bruscas.
+- Impacto automático de feriados nacionais.
+- Dias 25/12 e 01/01 tratados como DIAS FECHADOS (venda = 0 no histórico e na previsão).
+- Resultados finais arredondados para valores inteiros.
+1) Dados extraídos do banco Teraprod (2024–2025, loja 160, categorias 1 e 3).
+2) Identificadas 2 categorias com histórico.
+3) Criadas variáveis explicativas: efeito salário (dias 1 a 10) e indicador de dias fechados (25/12 e 01/01).
+
+Processando categoria: MASCULINO
+Categoria MASCULINO: histórico diário consolidado, outliers tratados e vendas zeradas em dias fechados.
+Modelo treinado com sucesso para a categoria MASCULINO.
+Previsão 2026 concluída para a categoria MASCULINO.
+
+Processando categoria: FEMININO
+Categoria FEMININO: histórico diário consolidado, outliers tratados e vendas zeradas em dias fechados.
+Modelo treinado com sucesso para a categoria FEMININO.
+Previsão 2026 concluída para a categoria FEMININO.
+
+Arquivo 'previsao_vendas_SCN_2026.xlsx' gerado com 730 linhas.

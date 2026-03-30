@@ -1,0 +1,211 @@
+<style>
+    .item-container {
+        display: grid;
+        grid-template-columns: repeat(4, auto); 
+        justify-content: center;               
+        column-gap: 22px;                      
+        row-gap: 20px;
+        padding: 10px;
+        width: 100%;
+    }
+    
+    @media (max-width: 900px) {
+        .item-container {
+            grid-template-columns: repeat(3, minmax(80px, 1fr));
+            column-gap: 20px;
+        }
+    }
+    
+    @media (max-width: 600px) {
+        .item-container {
+            grid-template-columns: repeat(3, minmax(80px, 1fr));
+            column-gap: 16px;
+            row-gap: 18px;
+        }
+    }
+
+    
+    .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* garante centralização horizontal */
+        text-align: center;
+    }
+    
+    .circular-background {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80px;
+        height: 80px;
+        border-radius: 50% 30% 50% 30%;
+        background: #4600fa;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15); 
+        margin: 0px;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .circular-background:hover {
+        border-color: #4600fa;
+        box-shadow: 0 0 6px #4600fa;
+    }
+
+    .mini-circular {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .circular-background img {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .icon-text {
+        color: rgb(119, 119, 119);
+        text-align: center;
+        display: block;
+        margin-top: 4px;
+        line-height: 1.2;
+        white-space: normal;
+        width: 85px;
+    }
+    
+    .home-button-with-zoom a {
+        text-decoration: none;
+    }
+
+</style>
+
+<div class="item-container">
+    <!-- 1 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="ponto de partida">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/pulsar-line/128/ffffff/dashboard-layout.png"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">Ponto de<br>Partida</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="flash de vendas">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/ios/128/ffffff/bullish--v1.png" alt="Flash Vendas"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">Flash<br>Vendas</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="venda ativa">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/ios/50/ffffff/shopping-bag--v1.png" alt="Venda Ativa"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">Venda<br>Ativa</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="diagnóstico">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/ios/128/ffffff/sparkling.png" alt="Diagnóstico"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">Diagnóstico</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="nps analitico">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/ios/128/ffffff/customer-survey.png" alt="NPS"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">NPS</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="menu venda">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/ios/128/ffffff/economic-improvement.png" alt="Menu Venda"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">Menu<br>Venda</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="menu processos">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/ios/129/ffffff/creating.png" alt="Menu processos"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">Processos<br>Core</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="item">
+        <div class="home-button-with-zoom">
+            <a>
+                <question-link query="menu suporte">
+                    <div class="circular-background">
+                        <div class="mini-circular">
+                            <img src="https://img.icons8.com/parakeet-line/129/ffffff/system-information.png" alt="Menu Comunicação"/>
+                        </div>
+                    </div>
+                    <div><span class="icon-text">Menu<br>Suporte</span></div>
+                </question-link>
+            </a>
+        </div>
+    </div>
+</div>

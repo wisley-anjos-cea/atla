@@ -1,4 +1,3 @@
-<style>
 .toggle-input {
     display: none;
 }
@@ -13,6 +12,38 @@
 }
 
 #chkEst:checked~.container-tabela .est-red {
+    display: none;
+}
+
+#chkOpt:checked~.container-tabela .opt-det {
+    display: table-cell;
+}
+
+#chkOpt:checked~.container-tabela .opt-red {
+    display: none;
+}
+
+#chkProf:checked~.container-tabela .prof-det {
+    display: table-cell;
+}
+
+#chkProf:checked~.container-tabela .prof-red {
+    display: none;
+}
+
+#chkRup:checked~.container-tabela .rup-det {
+    display: table-cell;
+}
+
+#chkRup:checked~.container-tabela .rup-red {
+    display: none;
+}
+
+#chkGiro:checked~.container-tabela .giro-det {
+    display: table-cell;
+}
+
+#chkGiro:checked~.container-tabela .giro-red {
     display: none;
 }
 
@@ -114,5 +145,3 @@
     background-color: #a16299 !important;
     color: black;
 }
-
-</style>

@@ -1,0 +1,67 @@
+.lqMain, .response_table_header th {
+ background-color:#00c899;
+color:#ffffff;
+}
+ .lqDefault {
+ text-align:left;
+}
+ .lqNumber {
+ text-align:right;
+}
+ .lqPercent {
+ text-align:right;
+}
+ .lqDate {
+ text-align:right;
+}
+ .lqDateTime {
+ text-align:right;
+}
+ a, a:link, a:visited, .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover, .web-interface .navbar-default .navbar-nav li:hover > a, .web-interface .navbar-default .navbar-nav li:focus > a {
+ color:#4600fa;
+}
+ a:active, a:hover, .web-interface .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover, .web-interface .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item:hover {
+ color:#3700c7;
+}
+ .link-hover-effect:before {
+ background-color:#3700c7;
+}
+ .lqButton {
+ background-color:#4600fa;
+color:#fff;
+border-color:#4600fa;
+}
+ .lqButton:focus, .lqButton.focus, .lqButton:active, .lqButton.active, .lqButton.active.focus, .lqButton.active:focus, .lqButton:active.focus, .lqButton:active:focus {
+ background-color:#0f00c3;
+border-color:#0f00c3;
+}
+ .lqButton:hover {
+ background-color:#2800dc;
+border-color:#2800dc;
+}
+ .looq-eye-loader-color {
+ color:#4600fa;
+}
+ .lqButton.disabled, .lqButton[disabled], .lqButton.disabled:hover, .lqButton[disabled]:hover, .lqButton.disabled:focus, .lqButton[disabled]:focus {
+ opacity:0.65;
+border-color:#545857;
+background-color:#4600fa;
+}
+ .web-interface .question-fragment-menu-tab.active, .web-interface .question-fragment-menu-text-item.active {
+ color:#4600fa;
+border-color:#4600fa;
+}
+ .noUnderline:hover .myFa {
+ border-color:#3700c7;
+}
+ .web-interface .question-fragment-menu-tab:hover, .web-interface .question-fragment-menu-text-item:hover {
+ color:#3700c7;
+border-color:#3700c7;
+}
+ .web-interface .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover, .web-interface .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item:hover {
+ border-bottom:2px solid #3700c7;
+}
+ #delph_logo {
+ background:url("/webclient/icon/client/nova_logo_cea.svg");
+}
+ 

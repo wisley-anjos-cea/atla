@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard C&A - Visão Estoque</title>
+    <link rel="stylesheet" href="designer.css">
+</head>
+
+<body>
+
+    <input type="checkbox" id="chkEst" class="toggle-input">
+    <input type="checkbox" id="chkOpt" class="toggle-input">
+    <input type="checkbox" id="chkProf" class="toggle-input">
+    <input type="checkbox" id="chkRup" class="toggle-input">
+    <input type="checkbox" id="chkGiro" class="toggle-input">
+
+    <div class="container-tabela tabela-auditoria">
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" class="col-loja">Loja</th>
+                    <th class="group-header col-venda">Venda</th>
+
+                    <th class="group-header est-red">
+                        <label for="chkEst" class="btn-exp">+</label>Estoque
+                    </th>
+                    <th colspan="3" class="group-header det est-det">
+                        <label for="chkEst" class="btn-exp">-</label>Estoque
+                    </th>
+
+                    <th class="group-header opt-red">
+                        <label for="chkOpt" class="btn-exp">+</label>Opções
+                    </th>
+                    <th colspan="6" class="group-header det opt-det">
+                        <label for="chkOpt" class="btn-exp">-</label>Opções
+                    </th>
+
+                    <th class="group-header prof-red">
+                        <label for="chkProf" class="btn-exp">+</label>Profundidade
+                    </th>
+                    <th colspan="6" class="group-header det prof-det">
+                        <label for="chkProf" class="btn-exp">-</label>Profundidade
+                    </th>
+
+                    <th class="group-header rup-red">
+                        <label for="chkRup" class="btn-exp">+</label>Ruptura
+                    </th>
+                    <th colspan="6" class="group-header det rup-det">
+                        <label for="chkRup" class="btn-exp">-</label>Ruptura
+                    </th>
+
+                    <th class="group-header giro-red">
+                        <label for="chkGiro" class="btn-exp">+</label>Giro
+                    </th>
+                    <th colspan="6" class="group-header det giro-det">
+                        <label for="chkGiro" class="btn-exp">-</label>Giro
+                    </th>
+                </tr>
+
+                <tr>
+                    <th class="header-destaque col-venda">Vnd Off vs LY</th>
+
+                    <th class="header-destaque est-red">*Dif Qtd Stk</th>
+                    <th class="det est-det">% Qtd LY</th>
+                    <th class="det est-det">% Qtd Comp</th>
+                    <th class="header-destaque det est-det">*Dif Qtd Stk</th>
+
+                    <th class="header-destaque opt-red">*Dif Opt</th>
+                    <th class="det opt-det">Avg Opt</th>
+                    <th class="sty-lojascomp det opt-det">Avg Comp</th>
+                    <th class="header-destaque det opt-det">*Div Avg</th>
+                    <th class="det opt-det">Opt LY</th>
+                    <th class="sty-lojascomp det opt-det">Opt Comp</th>
+                    <th class="header-destaque det opt-det">*Dif Opt</th>
+
+                    <th class="header-destaque prof-red">*Profun vs Comp</th>
+                    <th class="det prof-det">Profun.</th>
+                    <th class="sty-lojascomp det prof-det">P. Comp</th>
+                    <th class="header-destaque det prof-det">*P vs Comp</th>
+                    <th class="det prof-det">P LY</th>
+                    <th class="sty-lojascomp det prof-det">P Comp LY</th>
+                    <th class="header-destaque det prof-det">*P vs Comp LY</th>
+
+                    <th class="header-destaque rup-red">*Rup vs Comp</th>
+                    <th class="det rup-det">% Rup</th>
+                    <th class="det rup-det">% R Comp</th>
+                    <th class="header-destaque det rup-det">*R vs Comp</th>
+                    <th class="header-destaque det rup-det">*R Comp LY</th>
+                    <th class="det rup-det">R Comp LY</th>
+                    <th class="det rup-det">R vs LY</th>
+
+                    <th class="header-destaque giro-red">*Giro vs Comp</th>
+                    <th class="det giro-det">Giro</th>
+                    <th class="det giro-det">G Comp</th>
+                    <th class="header-destaque det giro-det">*G vs Comp</th>
+                    <th class="det giro-det">G LY</th>
+                    <th class="det giro-det">G Comp LY</th>
+                    <th class="header-destaque det giro-det">*G Comp LY</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <!-- linhas de dados aqui -->
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
