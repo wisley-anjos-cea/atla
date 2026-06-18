@@ -1,0 +1,714 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RemuneraApp - RV 2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            margin: 0;
+            overflow: hidden; 
+        }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bg-corporate-gradient {
+            background: linear-gradient(145deg, #0f172a 0%, #1e3a8a 100%);
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .month-selector {
+            background: rgba(255, 255, 255, 0.15);
+            transition: all 0.2s ease;
+        }
+        .month-selector:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .check-badge {
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border-radius: 50%;
+            padding: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn.active-desktop {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .nav-btn.active-mobile {
+            color: #1d4ed8; 
+        }
+        .nav-btn.active-mobile span {
+            font-weight: 700;
+        }
+        .view-section {
+            display: none;
+        }
+        .view-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex h-screen w-full">
+
+    <!-- DESKTOP SIDEBAR -->
+    <aside class="hidden md:flex flex-col w-64 bg-corporate-gradient text-white shadow-2xl z-30">
+        <div class="p-6 border-b border-white/10 flex items-center space-x-3">
+            <div class="bg-blue-600 p-2 rounded-lg shadow-lg">
+                <i data-lucide="bar-chart-2" class="w-6 h-6 text-white"></i>
+            </div>
+            <span class="text-xl font-bold tracking-tight">Remunera<span class="text-blue-300">App</span></span>
+        </div>
+        
+        <nav class="flex-1 px-4 py-8 space-y-2">
+            <button onclick="switchView('dashboard')" id="nav-desktop-dashboard" class="nav-btn active-desktop w-full flex items-center space-x-3 hover:bg-white/5 px-4 py-3 rounded-xl transition text-slate-300 hover:text-white border border-transparent">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                <span class="text-sm">Painel RV 2.0</span>
+            </button>
+            <button onclick="switchView('regras')" id="nav-desktop-regras" class="nav-btn w-full flex items-center space-x-3 hover:bg-white/5 px-4 py-3 rounded-xl transition text-slate-300 hover:text-white border border-transparent">
+                <i data-lucide="target" class="w-5 h-5"></i>
+                <span class="text-sm">Regras & Cut-offs</span>
+            </button>
+            <button onclick="switchView('extrato')" id="nav-desktop-extrato" class="nav-btn w-full flex items-center space-x-3 hover:bg-white/5 px-4 py-3 rounded-xl transition text-slate-300 hover:text-white border border-transparent">
+                <i data-lucide="wallet" class="w-5 h-5"></i>
+                <span class="text-sm">Extrato Detalhado</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTAINER -->
+    <div class="flex-1 flex flex-col h-screen relative overflow-hidden bg-slate-50">
+        
+        <div class="flex-1 overflow-y-auto hide-scrollbar pb-24 md:pb-8" id="scrollArea">
+            
+            <!-- HEADER -->
+            <header class="bg-corporate-gradient text-white pt-8 pb-16 md:pb-24 px-6 md:px-10 rounded-b-[2.5rem] md:rounded-none shadow-lg relative z-10">
+                <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between">
+                    
+                    <div class="flex justify-between items-start md:items-center w-full md:w-auto mb-6 md:mb-0">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-14 h-14 glass-panel rounded-full flex items-center justify-center shadow-inner">
+                                <i data-lucide="user" class="w-7 h-7 text-blue-100"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-blue-200 font-medium uppercase tracking-wider mb-0.5" id="userRoleTitle">Colaborador</p>
+                                <h1 class="text-xl md:text-2xl font-bold tracking-tight" id="userName">Carregando...</h1>
+                            </div>
+                        </div>
+                        <div class="flex md:hidden space-x-2">
+                            <button id="toggleEyeMobile" class="p-2 bg-white/10 rounded-full transition"><i data-lucide="eye" class="eyeIcon w-5 h-5"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+                        <button class="month-selector w-full md:w-auto flex items-center justify-center space-x-2 px-5 py-2.5 rounded-xl md:rounded-full border border-white/20 text-sm font-medium">
+                            <i data-lucide="calendar" class="w-4 h-4 text-blue-200"></i>
+                            <span>Ciclo: <strong id="currentMonth">Mês/Ano</strong></span>
+                        </button>
+
+                        <div class="glass-panel p-1 rounded-xl flex items-center w-full md:w-64">
+                            <select id="roleSelector" class="bg-transparent text-white text-sm font-medium w-full p-2 outline-none appearance-none cursor-pointer">
+                                <option value="aprendiz" class="text-slate-800">Visualizar: Jovem Aprendiz</option>
+                                <option value="associado_piso" class="text-slate-800" selected>Visualizar: Associado Piso</option>
+                                <option value="associado_beleza" class="text-slate-800">Visualizar: Associado Beleza</option>
+                                <option value="lider" class="text-slate-800">Visualizar: Líder Varejo</option>
+                                <option value="gerente" class="text-slate-800">Visualizar: Gerente de Loja</option>
+                            </select>
+                            <i data-lucide="settings-2" class="w-4 h-4 mr-3 text-blue-200 pointer-events-none"></i>
+                        </div>
+
+                        <div class="hidden md:flex space-x-2">
+                            <button id="toggleEyeDesktop" class="p-2.5 bg-white/10 hover:bg-white/20 rounded-full transition tooltip" title="Ocultar Valores">
+                                <i data-lucide="eye" class="eyeIcon w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- TELA 1: DASHBOARD -->
+            <main id="view-dashboard" class="view-section active max-w-7xl mx-auto px-4 md:px-10 -mt-10 md:-mt-14 relative z-20">
+                
+                <!-- AVISO LEGAL DE PREVISÃO (Teto de 86%) -->
+                <div id="disclaimerDashboard" class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 shadow-sm hidden fade-in">
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="info" class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0"></i>
+                        <div>
+                            <p class="text-sm font-bold text-blue-900">Previsão de Comissão</p>
+                            <p class="text-xs text-blue-800 mt-1 leading-relaxed">
+                                Os valores abaixo são uma <strong>estimativa</strong>. Conforme a regra do RV 2.0, o pagamento final (soma do Coletivo + Individual) é <strong class="underline decoration-blue-300">limitado a 86% do seu salário bruto</strong>. Os cálculos definitivos serão realizados pelo Departamento Pessoal no fechamento da folha.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Coluna Esquerda -->
+                    <div class="lg:col-span-8 space-y-6">
+                        
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-slate-200/50 border border-slate-100">
+                            <div class="flex justify-between items-start mb-4">
+                                <h2 class="text-slate-500 text-sm font-bold uppercase tracking-wider">Estimativa RV 2.0 (Acumulada)</h2>
+                                <div class="bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center border border-emerald-100 shadow-sm">
+                                    <i data-lucide="trending-up" class="w-4 h-4 mr-1.5"></i> Parcial
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-end space-x-2 mb-2">
+                                <span class="text-slate-400 text-2xl md:text-3xl font-medium mb-1 md:mb-2">R$</span>
+                                <h3 class="text-5xl md:text-6xl font-bold text-slate-800 tracking-tighter value-display" id="totalValue">0,00</h3>
+                            </div>
+                        </div>
+
+                        <!-- Cut-offs -->
+                        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                            <h3 class="text-slate-800 text-sm font-bold mb-4 uppercase tracking-wide flex items-center">
+                                <i data-lucide="check-square" class="w-5 h-5 mr-2 text-slate-500"></i> Condições (Cut-offs)
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="flex items-center justify-between p-3 rounded-xl border" id="cutoffIndicadores">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50" id="iconBoxInd">
+                                            <i data-lucide="target" class="w-5 h-5 text-slate-600" id="iconInd"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-bold text-slate-800">Mínimo 2 Indicadores</p>
+                                            <p class="text-[10px] text-slate-500">Acima de 100%</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-sm font-bold" id="statusIndicadores"></span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 rounded-xl border" id="cutoffFaltas">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50" id="iconBoxFaltas">
+                                            <i data-lucide="user-check" class="w-5 h-5 text-slate-600" id="iconFaltas"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-bold text-slate-800">Absenteísmo</p>
+                                            <p class="text-[10px] text-slate-500">2 faltas zera</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-sm font-bold" id="statusFaltas"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-slate-800 text-sm font-bold mb-3 px-2 uppercase tracking-wide text-blue-800 flex items-center">
+                                <i data-lucide="users" class="w-4 h-4 mr-2"></i> Resultado Coletivo
+                            </h3>
+                            <div id="coletivoList" class="space-y-4 md:grid md:grid-cols-2 md:space-y-0 md:gap-4"></div>
+                        </div>
+
+                        <div class="mt-6" id="individualSection">
+                            <h3 class="text-slate-800 text-sm font-bold mb-3 px-2 uppercase tracking-wide text-slate-700 flex items-center">
+                                <i data-lucide="user" class="w-4 h-4 mr-2"></i> Iniciativas Individuais
+                            </h3>
+                            <div id="individualList" class="space-y-4 md:grid md:grid-cols-2 md:space-y-0 md:gap-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna Direita -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <div class="bg-white rounded-3xl p-6 shadow-lg shadow-slate-200/50 border border-slate-100">
+                            <h3 class="text-slate-800 text-sm font-bold mb-4 uppercase tracking-wide">Composição</h3>
+                            <div class="w-full h-4 rounded-full flex overflow-hidden mb-6 bg-slate-100 shadow-inner">
+                                <div id="barColetivo" class="bg-blue-600 h-full transition-all duration-700"></div>
+                                <div id="barIndividual" class="bg-slate-800 h-full transition-all duration-700"></div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 rounded-xl bg-blue-50/50 border border-blue-50">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-3 h-3 bg-blue-600 rounded-full"></div>
+                                        <p class="text-xs text-slate-600 font-bold uppercase">Coletivo</p>
+                                    </div>
+                                    <p class="text-base font-bold text-slate-800 value-display" id="valColetivo">R$ 0,00</p>
+                                </div>
+                                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-3 h-3 bg-slate-800 rounded-full"></div>
+                                        <p class="text-xs text-slate-600 font-bold uppercase">Individual</p>
+                                    </div>
+                                    <p class="text-base font-bold text-slate-800 value-display" id="valIndividual">R$ 0,00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- TELA 2: REGRAS E CUT-OFFS -->
+            <main id="view-regras" class="view-section max-w-7xl mx-auto px-4 md:px-10 -mt-10 md:-mt-14 relative z-20">
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-slate-200/50 border border-slate-100 mb-6">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="p-3 bg-blue-100 rounded-xl"><i data-lucide="book-open" class="w-6 h-6 text-blue-700"></i></div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800">Manual RV 2.0</h2>
+                            <p class="text-sm text-slate-500">Regras e diretrizes do modelo de comissionamento.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200">
+                            <h3 class="text-sm font-bold text-slate-800 uppercase mb-4 flex items-center"><i data-lucide="pie-chart" class="w-4 h-4 mr-2 text-blue-600"></i> Pesos do Coletivo (Loja)</h3>
+                            <ul class="space-y-3">
+                                <li class="flex justify-between items-center text-sm border-b border-slate-200 pb-2"><span class="text-slate-600">Base de Vendas Loja</span><strong class="text-slate-800">50%</strong></li>
+                                <li class="flex justify-between items-center text-sm border-b border-slate-200 pb-2"><span class="text-slate-600">NPS Loja (Experiência)</span><strong class="text-slate-800">20%</strong></li>
+                                <li class="flex justify-between items-center text-sm border-b border-slate-200 pb-2"><span class="text-slate-600">Pay Loja (Ativações)</span><strong class="text-slate-800">25%</strong></li>
+                                <li class="flex justify-between items-center text-sm"><span class="text-slate-600">Ruptura de Reposição</span><strong class="text-slate-800">5%</strong></li>
+                            </ul>
+                            <p class="text-[10px] text-slate-400 mt-3">* Transferências massivas zeram o indicador de Ruptura.</p>
+                        </div>
+
+                        <div class="p-5 bg-red-50/50 rounded-2xl border border-red-100">
+                            <h3 class="text-sm font-bold text-red-800 uppercase mb-4 flex items-center"><i data-lucide="alert-triangle" class="w-4 h-4 mr-2"></i> Cut-offs (Penalidades)</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">1. Mínimo de Indicadores</p>
+                                    <p class="text-xs text-slate-600 mt-1">É obrigatório bater pelo menos <strong>2 indicadores acima de 100%</strong>. Caso contrário, a RV zera.</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">2. Absenteísmo (Faltas)</p>
+                                    <p class="text-xs text-slate-600 mt-1"><strong>1 Falta:</strong> Perde 50% da meta atingida.<br><strong>2 Faltas:</strong> Não elegível (Zera a RV). <br><span class="italic text-[10px]">*Exceto gerentes.</span></p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">3. Regra do Teto (86%)</p>
+                                    <p class="text-xs text-slate-600 mt-1">A soma total da comissão (Coletivo + Individual) é limitada ao teto de <strong>86% do Salário Bruto</strong> do colaborador.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- TELA 3: EXTRATO DETALHADO -->
+            <main id="view-extrato" class="view-section max-w-7xl mx-auto px-4 md:px-10 -mt-10 md:-mt-14 relative z-20">
+                
+                <!-- AVISO LEGAL NO EXTRATO -->
+                <div id="disclaimerExtrato" class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 shadow-sm hidden fade-in">
+                    <div class="flex items-start space-x-3">
+                        <i data-lucide="info" class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0"></i>
+                        <div>
+                            <p class="text-sm font-bold text-blue-900">Demonstrativo de Previsão</p>
+                            <p class="text-xs text-blue-800 mt-1 leading-relaxed">
+                                Os lançamentos abaixo representam a <strong>previsão de ganhos</strong> conforme as metas batidas. O processamento final considerará a regra de limite estabelecida (teto de 86% do salário bruto), a ser validada pelo DP.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+                    <div class="p-6 md:p-8 border-b border-slate-100 bg-slate-50 flex flex-col md:flex-row justify-between items-start md:items-center">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800 flex items-center"><i data-lucide="receipt" class="w-6 h-6 mr-2 text-blue-600"></i> Extrato de Simulação</h2>
+                            <p class="text-sm text-slate-500 mt-1">Detalhamento dos ganhos estimados no Ciclo Atual.</p>
+                        </div>
+                        <div class="mt-4 md:mt-0 text-left md:text-right">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Estimado</p>
+                            <p class="text-3xl font-bold text-emerald-600 value-display" id="extratoTotal">R$ 0,00</p>
+                        </div>
+                    </div>
+
+                    <div class="p-0">
+                        <ul class="divide-y divide-slate-100" id="extratoList">
+                            <!-- Injetado via JS -->
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 text-center">
+                        <button class="text-sm font-bold text-blue-600 hover:text-blue-800 transition flex items-center justify-center w-full"><i data-lucide="download" class="w-4 h-4 mr-2"></i> Baixar Demonstrativo em PDF</button>
+                    </div>
+                </div>
+            </main>
+
+        </div>
+
+        <!-- MOBILE NAV -->
+        <nav class="md:hidden absolute bottom-0 w-full bg-white border-t border-slate-200 px-2 py-2 flex justify-around items-center z-30 pb-safe shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
+            <button onclick="switchView('dashboard')" id="nav-mobile-dashboard" class="nav-btn active-mobile flex flex-col items-center p-2 text-slate-400 transition">
+                <i data-lucide="layout-dashboard" class="w-6 h-6 mb-1"></i>
+                <span class="text-[10px] uppercase tracking-wider">Painel</span>
+            </button>
+            <button onclick="switchView('regras')" id="nav-mobile-regras" class="nav-btn flex flex-col items-center p-2 text-slate-400 transition">
+                <i data-lucide="target" class="w-6 h-6 mb-1"></i>
+                <span class="text-[10px] uppercase tracking-wider">Regras</span>
+            </button>
+            <button onclick="switchView('extrato')" id="nav-mobile-extrato" class="nav-btn flex flex-col items-center p-2 text-slate-400 transition">
+                <i data-lucide="wallet" class="w-6 h-6 mb-1"></i>
+                <span class="text-[10px] uppercase tracking-wider">Extrato</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+        let isValuesHidden = false;
+        let currentRole = 'associado_piso'; // Valor inicial para o select também
+
+        const currentDate = new Date();
+        const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        const fullMonthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        document.getElementById('currentMonth').textContent = `${fullMonthNames[currentDate.getMonth()]}/${currentDate.getFullYear()}`;
+
+        /* BANCO DE DADOS */
+        const mockData = {
+            aprendiz: {
+                name: "Lucas Gabriel", roleTitle: "Jovem Aprendiz", hasCap: true,
+                faltas: 0, indicadoresAcima100: 3,
+                totalColetivo: 110.00, totalIndividual: 0.00,
+                coletivo: [
+                    { name: "Base de Vendas Loja", weight: "50%", resultStr: "150%", progressVal: 100, maxStr: "150%", earned: 60.00 },
+                    { name: "NPS Loja", weight: "20%", resultStr: "150%", progressVal: 100, maxStr: "150%", earned: 30.00 },
+                    { name: "Pay Loja", weight: "25%", resultStr: "100%", progressVal: 66, maxStr: "150%", earned: 15.00 },
+                    { name: "Ruptura de Reposição", weight: "5%", resultStr: "100%", progressVal: 66, maxStr: "150%", earned: 5.00 }
+                ],
+                individual: []
+            },
+            associado_piso: {
+                name: "João Silva", roleTitle: "Associado Piso e Pay", hasCap: true, 
+                faltas: 0, indicadoresAcima100: 3, 
+                totalColetivo: 437.50, totalIndividual: 435.00, 
+                coletivo: [
+                    { name: "Base de Vendas Loja", weight: "50%", resultStr: "150%", progressVal: 100, maxStr: "150%", earned: 250.00 },
+                    { name: "NPS Loja", weight: "20%", resultStr: "150%", progressVal: 100, maxStr: "150%", earned: 100.00 },
+                    { name: "Pay Loja", weight: "25%", resultStr: "100%", progressVal: 66, maxStr: "150%", earned: 62.50 },
+                    { name: "Ruptura de Reposição", weight: "5%", resultStr: "100%", progressVal: 66, maxStr: "150%", earned: 25.00 }
+                ],
+                individual: [
+                    { name: "Bônus Pay Ativado", targetStr: "Meta: 50", currentStr: "Feito: 65", progressVal: 100, earned: 275.00, icon: "credit-card" },
+                    { name: "Bônus PCJ", targetStr: "Meta: 30", currentStr: "Feito: 40", progressVal: 100, earned: 110.00, icon: "shopping-bag" },
+                    { name: "Bônus Sniper (Tkts)", targetStr: "Meta: 75%", currentStr: "Feito: 80%", progressVal: 100, earned: 50.00, icon: "crosshair" }
+                ]
+            },
+            associado_beleza: {
+                name: "Marina Costa", roleTitle: "Associado Beleza", hasCap: true,
+                faltas: 0, indicadoresAcima100: 2, 
+                totalColetivo: 150.00, totalIndividual: 540.00, 
+                coletivo: [
+                    { name: "Base Vendas Beleza", weight: "60%", resultStr: "100%", progressVal: 66, maxStr: "150%", earned: 90.00 },
+                    { name: "NPS Beleza", weight: "20%", resultStr: "100%", progressVal: 66, maxStr: "150%", earned: 30.00 },
+                    { name: "Carrinho 1 peça", weight: "10%", resultStr: "100%", progressVal: 66, maxStr: "150%", earned: 15.00 },
+                    { name: "Pay Loja", weight: "10%", resultStr: "100%", progressVal: 66, maxStr: "150%", earned: 15.00 }
+                ],
+                individual: [
+                    { name: "Comissão Setor Beleza", targetStr: "Faixa > 120%", currentStr: "R$ 36k (1,5%)", progressVal: 100, earned: 540.00, icon: "sparkles" }
+                ]
+            },
+            lider: {
+                name: "Carlos Eduardo", roleTitle: "Líder Varejo", hasCap: true,
+                faltas: 1, indicadoresAcima100: 3, 
+                totalColetivo: 555.00, totalIndividual: 165.00, 
+                coletivo: [
+                    { name: "Base de Vendas Loja", weight: "50%", resultStr: "100%", progressVal: 66, maxStr: "150%", earned: 300.00 }, 
+                    { name: "NPS Loja", weight: "20%", resultStr: "100%", progressVal: 66, maxStr: "150%", earned: 120.00 },
+                    { name: "Pay Loja", weight: "25%", resultStr: "150%", progressVal: 100, maxStr: "150%", earned: 450.00 },
+                    { name: "Ruptura de Reposição", weight: "5%", resultStr: "90%", progressVal: 60, maxStr: "150%", earned: 0.00 } 
+                ],
+                individual: [
+                    { name: "Bônus Pay Ativado", targetStr: "Meta: 50", currentStr: "Feito: 25", progressVal: 50, earned: 165.00, icon: "credit-card" }
+                ]
+            },
+            gerente: {
+                name: "Ana Beatriz", roleTitle: "Gerente de Loja II", hasCap: false, 
+                faltas: 0, indicadoresAcima100: 4, 
+                totalColetivo: 4590.00, totalIndividual: 0.00, 
+                coletivo: [
+                    { name: "Base de Vendas Loja", weight: "50%", resultStr: "150%", progressVal: 100, maxStr: "150%", earned: 2700.00 },
+                    { name: "NPS Loja", weight: "20%", resultStr: "150%", progressVal: 100, maxStr: "150%", earned: 1080.00 },
+                    { name: "Pay Loja", weight: "25%", resultStr: "120%", progressVal: 80, maxStr: "150%", earned: 810.00 },
+                    { name: "Ruptura de Reposição", weight: "5%", resultStr: "0%", progressVal: 0, maxStr: "150%", earned: 0.00 }
+                ],
+                individual: []
+            }
+        };
+
+        const formatMoney = (value) => value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('active-desktop');
+                el.classList.remove('active-mobile');
+                el.classList.add('text-slate-400');
+            });
+            
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            
+            const btnDesktop = document.getElementById(`nav-desktop-${viewId}`);
+            if(btnDesktop) {
+                btnDesktop.classList.add('active-desktop');
+                btnDesktop.classList.remove('text-slate-400');
+            }
+            
+            const btnMobile = document.getElementById(`nav-mobile-${viewId}`);
+            if(btnMobile) {
+                btnMobile.classList.add('active-mobile');
+                btnMobile.classList.remove('text-slate-400');
+            }
+
+            document.getElementById('scrollArea').scrollTop = 0;
+            lucide.createIcons();
+            applyVisibility();
+        }
+
+        function renderDashboard() {
+            const data = mockData[currentRole];
+            document.getElementById('userName').textContent = data.name;
+            document.getElementById('userRoleTitle').textContent = data.roleTitle;
+            
+            const totalRealizado = data.totalColetivo + data.totalIndividual;
+            
+            // Controle de Exibição do Aviso de Teto (hasCap)
+            const discDashboard = document.getElementById('disclaimerDashboard');
+            const discExtrato = document.getElementById('disclaimerExtrato');
+            
+            if (data.hasCap) {
+                discDashboard.classList.remove('hidden');
+                discExtrato.classList.remove('hidden');
+            } else {
+                discDashboard.classList.add('hidden');
+                discExtrato.classList.add('hidden');
+            }
+
+            document.getElementById('totalValue').setAttribute('data-value', formatMoney(totalRealizado));
+            document.getElementById('valColetivo').setAttribute('data-value', `R$ ${formatMoney(data.totalColetivo)}`);
+            document.getElementById('valIndividual').setAttribute('data-value', `R$ ${formatMoney(data.totalIndividual)}`);
+
+            setTimeout(() => {
+                const totalGains = totalRealizado || 1;
+                document.getElementById('barColetivo').style.width = `${(data.totalColetivo / totalGains) * 100}%`;
+                document.getElementById('barIndividual').style.width = `${(data.totalIndividual / totalGains) * 100}%`;
+            }, 200);
+
+            // Cut-offs
+            const cutoffInd = document.getElementById('cutoffIndicadores');
+            const statusInd = document.getElementById('statusIndicadores');
+            const iconBoxInd = document.getElementById('iconBoxInd');
+            const iconInd = document.getElementById('iconInd');
+            if(data.indicadoresAcima100 >= 2) {
+                cutoffInd.className = "flex items-center justify-between p-3 rounded-xl border border-green-200 bg-green-50/50";
+                iconBoxInd.className = "w-10 h-10 rounded-full flex items-center justify-center bg-green-100";
+                iconInd.className = "w-5 h-5 text-green-600";
+                statusInd.className = "text-sm font-bold text-green-600";
+                statusInd.textContent = `${data.indicadoresAcima100} Ind. (OK)`;
+            } else {
+                cutoffInd.className = "flex items-center justify-between p-3 rounded-xl border border-red-200 bg-red-50/50";
+                iconBoxInd.className = "w-10 h-10 rounded-full flex items-center justify-center bg-red-100";
+                iconInd.className = "w-5 h-5 text-red-600";
+                statusInd.className = "text-sm font-bold text-red-600";
+                statusInd.textContent = `${data.indicadoresAcima100} Ind. (ZERA)`;
+            }
+
+            const cutoffFaltas = document.getElementById('cutoffFaltas');
+            const statusFaltas = document.getElementById('statusFaltas');
+            const iconBoxFaltas = document.getElementById('iconBoxFaltas');
+            const iconFaltas = document.getElementById('iconFaltas');
+            if(currentRole === 'gerente') {
+                statusFaltas.textContent = "Isento";
+                cutoffFaltas.className = "flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50";
+            } else if(data.faltas === 0) {
+                cutoffFaltas.className = "flex items-center justify-between p-3 rounded-xl border border-green-200 bg-green-50/50";
+                iconBoxFaltas.className = "w-10 h-10 rounded-full flex items-center justify-center bg-green-100";
+                iconFaltas.className = "w-5 h-5 text-green-600";
+                statusFaltas.className = "text-sm font-bold text-green-600";
+                statusFaltas.textContent = "0 Faltas (OK)";
+            } else if(data.faltas === 1) {
+                cutoffFaltas.className = "flex items-center justify-between p-3 rounded-xl border border-yellow-200 bg-yellow-50/50";
+                iconBoxFaltas.className = "w-10 h-10 rounded-full flex items-center justify-center bg-yellow-100";
+                iconFaltas.className = "w-5 h-5 text-yellow-600";
+                statusFaltas.className = "text-sm font-bold text-yellow-600";
+                statusFaltas.textContent = "1 Falta (-50%)";
+            } else {
+                cutoffFaltas.className = "flex items-center justify-between p-3 rounded-xl border border-red-200 bg-red-50/50";
+                iconBoxFaltas.className = "w-10 h-10 rounded-full flex items-center justify-center bg-red-100";
+                iconFaltas.className = "w-5 h-5 text-red-600";
+                statusFaltas.className = "text-sm font-bold text-red-600";
+                statusFaltas.textContent = "2 Faltas (ZERA)";
+            }
+
+            // Listas Dashboard
+            const colList = document.getElementById('coletivoList');
+            colList.innerHTML = ''; 
+            data.coletivo.forEach((ind, index) => {
+                const isComplete = parseFloat(ind.resultStr) >= 100;
+                const barColor = isComplete ? 'bg-blue-600' : 'bg-blue-400';
+                colList.insertAdjacentHTML('beforeend', `
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-[10px] text-blue-600 font-bold uppercase tracking-wide mb-1">Peso: ${ind.weight}</p>
+                                <h4 class="text-sm font-bold text-slate-800 leading-tight">${ind.name}</h4>
+                            </div>
+                            <span class="text-base font-bold text-slate-800 value-display" data-value="R$ ${formatMoney(ind.earned)}">R$ ${formatMoney(ind.earned)}</span>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-[11px] text-slate-500 mb-2 font-medium">
+                                <span>Realizado: <strong class="text-slate-700">${ind.resultStr}</strong></span>
+                                <span>Máx: <strong class="text-slate-700">${ind.maxStr}</strong></span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2 flex items-center relative">
+                                <div class="${barColor} h-2 rounded-full transition-all duration-1000" style="width: ${ind.progressVal}%"></div>
+                                ${isComplete ? '<div class="check-badge"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 bg-white rounded-full"></i></div>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+
+            const indSection = document.getElementById('individualSection');
+            const indList = document.getElementById('individualList');
+            indList.innerHTML = ''; 
+            if(data.individual.length > 0) {
+                indSection.style.display = 'block';
+                data.individual.forEach((ind) => {
+                    const isComplete = ind.progressVal >= 100;
+                    const barColor = isComplete ? 'bg-slate-800' : 'bg-slate-400';
+                    indList.insertAdjacentHTML('beforeend', `
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-2 rounded-xl bg-slate-100 text-slate-700"><i data-lucide="${ind.icon}" class="w-5 h-5"></i></div>
+                                    <h4 class="text-sm font-bold text-slate-800 leading-tight">${ind.name}</h4>
+                                </div>
+                                <span class="text-base font-bold text-slate-800 value-display" data-value="R$ ${formatMoney(ind.earned)}">R$ ${formatMoney(ind.earned)}</span>
+                            </div>
+                            <div class="mt-auto">
+                                <div class="flex justify-between text-[11px] text-slate-500 mb-2 font-medium">
+                                    <span>${ind.currentStr}</span>
+                                    <span>${ind.targetStr}</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2 flex items-center relative">
+                                    <div class="${barColor} h-2 rounded-full transition-all duration-1000" style="width: ${ind.progressVal}%"></div>
+                                    ${isComplete ? '<div class="check-badge"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 bg-white rounded-full"></i></div>' : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
+            } else {
+                indSection.style.display = 'none';
+            }
+
+            // Extrato
+            document.getElementById('extratoTotal').setAttribute('data-value', `R$ ${formatMoney(totalRealizado)}`);
+            const extratoList = document.getElementById('extratoList');
+            extratoList.innerHTML = '';
+
+            if(data.faltas === 1 && currentRole !== 'gerente') {
+                extratoList.insertAdjacentHTML('beforeend', `
+                    <li class="px-6 py-4 flex items-center justify-between bg-red-50/30">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center"><i data-lucide="user-minus" class="w-5 h-5"></i></div>
+                            <div><p class="text-sm font-bold text-slate-800">Penalidade: 1 Falta</p><p class="text-xs text-slate-500">Corte de 50% na RV Coletiva</p></div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-sm font-bold text-red-600">Aplicado</span>
+                        </div>
+                    </li>
+                `);
+            }
+
+            data.coletivo.forEach(ind => {
+                if(ind.earned > 0) {
+                    extratoList.insertAdjacentHTML('beforeend', `
+                        <li class="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center"><i data-lucide="users" class="w-5 h-5"></i></div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">${ind.name}</p>
+                                    <p class="text-[11px] text-slate-500 uppercase">RV Coletiva • 30 ${monthNames[currentDate.getMonth()]}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-bold text-emerald-600 value-display" data-value="+ R$ ${formatMoney(ind.earned)}">+ R$ ${formatMoney(ind.earned)}</span>
+                                <p class="text-[10px] text-slate-400">Estimado</p>
+                            </div>
+                        </li>
+                    `);
+                }
+            });
+
+            data.individual.forEach(ind => {
+                if(ind.earned > 0) {
+                    extratoList.insertAdjacentHTML('beforeend', `
+                        <li class="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center"><i data-lucide="${ind.icon}" class="w-5 h-5"></i></div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">${ind.name}</p>
+                                    <p class="text-[11px] text-slate-500 uppercase">Bônus Individual • 30 ${monthNames[currentDate.getMonth()]}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-bold text-emerald-600 value-display" data-value="+ R$ ${formatMoney(ind.earned)}">+ R$ ${formatMoney(ind.earned)}</span>
+                                <p class="text-[10px] text-slate-400">Estimado</p>
+                            </div>
+                        </li>
+                    `);
+                }
+            });
+
+            lucide.createIcons();
+            applyVisibility();
+        }
+
+        function applyVisibility() {
+            const displays = document.querySelectorAll('.value-display');
+            const eyeIcons = document.querySelectorAll('.eyeIcon');
+            if (isValuesHidden) {
+                eyeIcons.forEach(icon => icon.setAttribute('data-lucide', 'eye-off'));
+                displays.forEach(el => el.textContent = '••••••');
+            } else {
+                eyeIcons.forEach(icon => icon.setAttribute('data-lucide', 'eye'));
+                displays.forEach(el => el.textContent = el.getAttribute('data-value'));
+            }
+            lucide.createIcons();
+        }
+
+        document.getElementById('toggleEyeMobile').addEventListener('click', () => { isValuesHidden = !isValuesHidden; applyVisibility(); });
+        document.getElementById('toggleEyeDesktop').addEventListener('click', () => { isValuesHidden = !isValuesHidden; applyVisibility(); });
+
+        document.getElementById('roleSelector').addEventListener('change', (e) => {
+            currentRole = e.target.value;
+            const scrollArea = document.getElementById('scrollArea');
+            scrollArea.style.opacity = '0';
+            setTimeout(() => {
+                renderDashboard();
+                scrollArea.style.opacity = '1';
+                scrollArea.style.transition = 'opacity 0.3s ease';
+            }, 200);
+        });
+
+        // Initialize
+        document.getElementById('roleSelector').value = 'associado_piso';
+        window.onload = renderDashboard;
+    </script>
+</body>
+</html>
+
